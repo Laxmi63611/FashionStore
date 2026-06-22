@@ -23,23 +23,23 @@ public class DBConnection {
         username = System.getenv("MYSQLUSER");
         password = System.getenv("MYSQLPASSWORD");
 
-        // 2. If environment variables are not set, try to load from local db.properties file
+        // 2. If environment variables are not set, load strictly from local db.properties file
         if (host == null || port == null || dbName == null || username == null || password == null) {
             try (InputStream input = DBConnection.class.getClassLoader().getResourceAsStream("db.properties")) {
                 Properties prop = new Properties();
                 if (input != null) {
                     prop.load(input);
-                    host = prop.getProperty("db.host", "localhost");
-                    port = prop.getProperty("db.port", "3306");
-                    dbName = prop.getProperty("db.name", "fashion_store1");
-                    username = prop.getProperty("db.user", "root");
-                    password = prop.getProperty("db.password", "");
+                    host = prop.getProperty("db.host");
+                    port = prop.getProperty("db.port");
+                    dbName = prop.getProperty("db.name");
+                    username = prop.getProperty("db.user");
+                    password = prop.getProperty("db.password");
                 } else {
-                    // Fallbacks if no file is found
-                    host = "localhost";
-                    port = "3306";
-                    dbName = "fashion_store1";
-                    username = "root";
+                    // No default fallbacks to keep code on GitHub 100% private
+                    host = "";
+                    port = "";
+                    dbName = "";
+                    username = "";
                     password = "";
                 }
             } catch (Exception e) {
@@ -52,7 +52,7 @@ public class DBConnection {
     // Private constructor — no instantiation
     private DBConnection() {}
 
-    // Always returns a fresh connection — fixes "connection closed" error
+    // Always returns a fresh connection
     public static Connection getConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
