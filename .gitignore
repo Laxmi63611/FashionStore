@@ -1,6 +1,10 @@
 # Maven build directory
 target/
 
+# Local credentials (database passwords, API keys)
+db.properties
+**/db.properties
+
 # IDE specific files
 .settings/
 .metadata/
